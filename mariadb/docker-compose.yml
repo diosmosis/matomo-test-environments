@@ -1,0 +1,19 @@
+version: '2'
+services:
+  matomo:
+    build: .
+    volumes:
+      - ${MATOMO_HOME}:/usr/src/piwik
+      - ./piwik.php.ini:/usr/local/etc/php/php.ini
+    working_dir: /usr/src/piwik
+    depends_on:
+      - mariadb
+    ports:
+      - "3000:3000"
+    command: php -S matomo:3000
+  mariadb:
+    image: mariadb
+    environment:
+      MYSQL_ROOT_PASSWORD: pass
+    volumes:
+      - ./data:/var/lib/mysql:delegated
